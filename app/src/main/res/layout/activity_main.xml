@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,19 +8,22 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:textAlignment="center"
         android:fontFamily="@font/baskervville"
         android:text="Crypto Validate"
+        android:textColor="@color/white"
+        android:background="@color/purple_700"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-        android:layout_marginTop="60sp"/>
+        android:padding="15sp"/>
 
     <ImageView
         android:src="@drawable/ic_outline_qr_code_scanner_24"
         android:layout_width="70sp"
         android:layout_height="70sp"
-        android:layout_marginTop="70sp"
+        android:layout_marginTop="180sp"
         android:layout_gravity="center"/>
 
     <TextView
@@ -54,40 +58,44 @@
     </LinearLayout>
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_marginTop="60sp"
-        android:layout_marginStart="15sp"
-        android:layout_marginEnd="15sp"
+        android:id="@+id/result_card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15sp"
+        android:layout_marginTop="60sp"
+        android:layout_marginEnd="15sp"
+        android:visibility="gone"
+        app:cardCornerRadius="0sp"
+        app:cardElevation="7sp">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/qr_code_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10sp"
                 android:text="Scanned Address : 5665646488444776"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                android:textStyle="bold"
-                android:padding="10sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/validate_btn"
-                android:text="Validate"
-                android:layout_marginTop="10sp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10sp"
+                android:text="Validate" />
 
             <Button
                 android:id="@+id/share_btn"
-                android:text="Share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"/>
+                android:layout_marginBottom="10sp"
+                android:text="Share" />
 
         </LinearLayout>
 
