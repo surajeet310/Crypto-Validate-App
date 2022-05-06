@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         scanEthBtn = findViewById(R.id.scan_eth_btn)
         addressText = findViewById(R.id.qr_code_data)
         resultCardView = findViewById(R.id.result_card_view)
+        validateBtn = findViewById(R.id.validate_btn)
         val startScannerActivityForBtc = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             if (it.resultCode == Activity.RESULT_OK){
                 if (it.data != null){
@@ -60,8 +61,9 @@ class MainActivity : AppCompatActivity() {
                 addressText.text = "Scanned ETH Address: "+ethAddress
             }
         }
+        checkPermissions()
         scanBtcBtn.setOnClickListener {
-            checkPermissions()
+            ethAddress = ""
             isPermitted.observe(this, Observer { status->
                 if (status){
                     startScannerActivityForBtc.launch(Intent(this,ScannerActivity::class.java))
@@ -72,7 +74,7 @@ class MainActivity : AppCompatActivity() {
             })
         }
         scanEthBtn.setOnClickListener {
-            checkPermissions()
+            btcAddress = ""
             isPermitted.observe(this, Observer { status->
                 if (status){
                     startScannerActivityForEth.launch(Intent(this,ScannerActivity::class.java))
@@ -81,6 +83,26 @@ class MainActivity : AppCompatActivity() {
                     Snackbar.make(it,"Permission for Camera is required to scan QR",Snackbar.LENGTH_SHORT).show()
                 }
             })
+        }
+
+        validateBtn.setOnClickListener {
+            if ((btcAddress != "")&&(btcAddress != "None")){
+                if (Validators.validateBTCAddress(btcAddress.trim())){
+                    Snackbar.make(it,"The Scanned BTC Address is valid",Snackbar.LENGTH_SHORT).show()
+                }
+                else{
+                    Snackbar.make(it,"The Scanned BTC Address is invalid",Snackbar.LENGTH_SHORT).show()
+                }
+            }
+
+            if ((ethAddress != "")&&(ethAddress != "None")){
+                if (Validators.validateETHAddress(ethAddress.trim())){
+                    Snackbar.make(it,"The Scanned ETH Address is valid",Snackbar.LENGTH_SHORT).show()
+                }
+                else{
+                    Snackbar.make(it,"The Scanned ETH Address is invalid",Snackbar.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
