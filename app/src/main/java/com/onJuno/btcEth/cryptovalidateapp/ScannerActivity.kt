@@ -1,8 +1,8 @@
 package com.onJuno.btcEth.cryptovalidateapp
 
-/*
-    Used a opensource CodeScanner library in order to facilitate a QR code scanner
-    Reference Link : https://github.com/yuriy-budiyev/code-scanner
+/**
+ * Used a opensource library 'Code scanner' in order to facilitate a QR code scanner
+ * Reference Link : https://github.com/yuriy-budiyev/code-scanner
  */
 
 import android.app.Activity
@@ -31,9 +31,9 @@ class ScannerActivity : AppCompatActivity() {
         codeScanner.isAutoFocusEnabled = true
         codeScanner.isFlashEnabled = false
 
-        /*
-            The DecodeCallback provides the data obtained after successful scanning of the QR code.
-            We send back the retrieved data to the MainActivity.
+        /**
+         * The DecodeCallback provides the data obtained after successful scanning of the QR code.
+         * Retrieved data is sent back to the MainActivity.
          */
         codeScanner.decodeCallback = DecodeCallback {
             val intent = Intent().apply {

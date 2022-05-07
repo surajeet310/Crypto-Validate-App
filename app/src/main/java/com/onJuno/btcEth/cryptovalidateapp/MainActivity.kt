@@ -35,11 +35,11 @@ class MainActivity : AppCompatActivity() {
         resultCardView = findViewById(R.id.result_card_view)
         validateBtn = findViewById(R.id.validate_btn)
         shareBtn = findViewById(R.id.share_btn)
-        /*
-            In order to differentiate which address(BTC/ETH) is going to be scanned, two ActivityResultLauncher variables viz.
-            'startScannerActivityForBtc' and 'startScannerActivityForEth' are initialized, which are used to launch the QR code scanning activity.
-            The 'startScannerActivityForBtc' sets the data received from the scanner activity to the 'btcAddress'. Similarly,
-            'startScannerActivityForEth' sets the data received from the scanner activity to the 'ethAddress'.
+        /**
+         * In order to differentiate which address(BTC/ETH) is going to be scanned, two ActivityResultLauncher variables viz.
+         * 'startScannerActivityForBtc' and 'startScannerActivityForEth' are initialized, which are used to launch the QR code scanning activity.
+         * The 'startScannerActivityForBtc' sets the data received from the scanner activity to the 'btcAddress'. Similarly,
+         * 'startScannerActivityForEth' sets the data received from the scanner activity to the 'ethAddress'.
          */
         val startScannerActivityForBtc = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             if (it.resultCode == Activity.RESULT_OK){
@@ -66,15 +66,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
         checkPermissions()
-        /*
-           'ethAddress' is the string which holds the ETH address.
-            When the 'BTC' button is clicked, the 'ethAddress' is set to None in order to make sure that there is only one available address(BTC)
-            to validate and share, when the 'Validate' and 'Share' button is clicked.
+        /**
+         *'ethAddress' is the string which holds the ETH address.
+         * When the 'BTC' button is clicked, the 'ethAddress' is set to None in order to make sure that there is only one available address(BTC)
+         * to validate and share, when the 'Validate' and 'Share' button is clicked.
          */
         scanBtcBtn.setOnClickListener {
             ethAddress = "None"
-            /*
-                'isPermitted' denotes whether the user has granted the permission or not.
+            /**
+             * 'isPermitted' denotes whether the user has granted the permission or not.
              */
             if (isPermitted){
                 startScannerActivityForBtc.launch(Intent(this,ScannerActivity::class.java))
@@ -83,10 +83,10 @@ class MainActivity : AppCompatActivity() {
                 Snackbar.make(it,"Permission for Camera is required to scan QR",Snackbar.LENGTH_SHORT).show()
             }
         }
-        /*
-           'btcAddress' is the string which holds the BTC address.
-            When the 'ETH' button is clicked, the 'btcAddress' is set to None in order to make sure that there is only one available address(ETH)
-            to validate and share, when the 'Validate' and 'Share' button is clicked.
+        /**
+         *'btcAddress' is the string which holds the BTC address.
+         * When the 'ETH' button is clicked, the 'btcAddress' is set to None in order to make sure that there is only one available address(ETH)
+         * to validate and share, when the 'Validate' and 'Share' button is clicked.
          */
         scanEthBtn.setOnClickListener {
             btcAddress = "None"
@@ -99,16 +99,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         validateBtn.setOnClickListener {
-            /*
-                Checks if both the address are empty
+            /**
+             * Checks if both the addresses are empty
              */
             if ((btcAddress == "None")&&(ethAddress == "None")){
                 Snackbar.make(it,"Cannot validate empty address",Snackbar.LENGTH_SHORT).show()
             }
 
-            /*
-                Checks which one of the addresses(BTC/ETH) is non empty. The non empty address undergoes validation.
-                Both of two addresses cannot be non empty at the same time, because 'btcAddress' is set to None in 'ETH' button's Click listener event and vice versa.
+            /**
+             * Checks which one of the addresses(BTC/ETH) is non empty. The non empty address undergoes validation.
+             * Both of two addresses cannot be non empty at the same time, because 'btcAddress' is set to None in 'ETH' button's Click listener event and vice versa.
              */
 
             if (btcAddress != "None"){
@@ -131,21 +131,21 @@ class MainActivity : AppCompatActivity() {
         }
 
         shareBtn.setOnClickListener {
-            /*
-                Checks if both the address are empty
+            /**
+             * Checks if both the addresses are empty
              */
             if ((btcAddress == "None")&&(ethAddress == "None")){
                 Snackbar.make(it,"Cannot share empty address",Snackbar.LENGTH_SHORT).show()
             }
 
-            /*
-                Checks which one of the addresses(BTC/ETH) is non empty. The non empty address will be shared.
-                Both of two addresses cannot be non empty at the same time, because 'btcAddress' is set to None in 'ETH' button's Click listener event and vice versa.
+            /**
+             * Checks which one of the addresses(BTC/ETH) is non empty. The non empty address will be shared.
+             * Both of two addresses cannot be non empty at the same time, because 'btcAddress' is set to None in 'ETH' button's Click listener event and vice versa.
              */
 
             if (btcAddress != "None"){
-                /*
-                    Checks if the address is valid for sharing.
+                /**
+                 * Checks if the address is valid for sharing.
                  */
                 if (Validators.validateBTCAddress(btcAddress.trim())){
                     val messageBody = "Here is a BTC Address I scanned using the Crypto Validate App : $btcAddress"
@@ -176,8 +176,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    /*
-        Checks for necessary camera permission. If not permitted, then prompts the user, else sets the 'isPermitted' value to be true.
+
+    /**
+     * Checks for necessary camera permission. If not permitted, then prompts the user, else sets the 'isPermitted' value to be true.
      */
     private fun checkPermissions(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED){
@@ -187,8 +188,9 @@ class MainActivity : AppCompatActivity() {
             isPermitted = true
         }
     }
-    /*
-        If the user grants permission, the variable 'isPermitted' is set to true else false
+
+    /**
+     * If the user grants permission, the variable 'isPermitted' is set to true else false
      */
     override fun onRequestPermissionsResult(
         requestCode: Int,
