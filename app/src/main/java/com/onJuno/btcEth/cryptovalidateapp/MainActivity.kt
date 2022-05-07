@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -25,8 +26,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var shareBtn:Button
     private lateinit var addressText:TextView
     private lateinit var resultCardView:MaterialCardView
-    private var btcAddress:String = ""
-    private var ethAddress:String = ""
+    private var btcAddress:String = "None"
+    private var ethAddress:String = "None"
     private val CAMERA_REQUEST_CODE = 100
     private var isPermitted = MutableLiveData<Boolean>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +38,10 @@ class MainActivity : AppCompatActivity() {
         addressText = findViewById(R.id.qr_code_data)
         resultCardView = findViewById(R.id.result_card_view)
         validateBtn = findViewById(R.id.validate_btn)
+        shareBtn = findViewById(R.id.share_btn)
         val startScannerActivityForBtc = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             if (it.resultCode == Activity.RESULT_OK){
-                if (it.data != null){
+                if ((it.data != null)&&(it.data!!.getStringExtra("data").toString().isNotEmpty())){
                     btcAddress = it.data!!.getStringExtra("data").toString()
                 }
                 else{
@@ -51,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         }
         val startScannerActivityForEth = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             if (it.resultCode == Activity.RESULT_OK){
-                if (it.data != null){
+                if ((it.data != null)&&(it.data!!.getStringExtra("data").toString().isNotEmpty())){
                     ethAddress = it.data!!.getStringExtra("data").toString()
                 }
                 else{
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         }
         checkPermissions()
         scanBtcBtn.setOnClickListener {
-            ethAddress = ""
+            ethAddress = "None"
             isPermitted.observe(this, Observer { status->
                 if (status){
                     startScannerActivityForBtc.launch(Intent(this,ScannerActivity::class.java))
@@ -74,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             })
         }
         scanEthBtn.setOnClickListener {
-            btcAddress = ""
+            btcAddress = "None"
             isPermitted.observe(this, Observer { status->
                 if (status){
                     startScannerActivityForEth.launch(Intent(this,ScannerActivity::class.java))
@@ -86,7 +88,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         validateBtn.setOnClickListener {
-            if ((btcAddress != "")&&(btcAddress != "None")){
+            if ((btcAddress == "None")&&(ethAddress == "None")){
+                Snackbar.make(it,"Cannot validate empty address",Snackbar.LENGTH_SHORT).show()
+            }
+
+            if (btcAddress != "None"){
                 if (Validators.validateBTCAddress(btcAddress.trim())){
                     Snackbar.make(it,"The Scanned BTC Address is valid",Snackbar.LENGTH_SHORT).show()
                 }
@@ -95,12 +101,47 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            if ((ethAddress != "")&&(ethAddress != "None")){
+            if (ethAddress != "None"){
                 if (Validators.validateETHAddress(ethAddress.trim())){
                     Snackbar.make(it,"The Scanned ETH Address is valid",Snackbar.LENGTH_SHORT).show()
                 }
                 else{
                     Snackbar.make(it,"The Scanned ETH Address is invalid",Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        shareBtn.setOnClickListener {
+            if ((btcAddress == "None")&&(ethAddress == "None")){
+                Snackbar.make(it,"Cannot share empty address",Snackbar.LENGTH_SHORT).show()
+            }
+
+            if (btcAddress != "None"){
+                if (Validators.validateBTCAddress(btcAddress.trim())){
+                    val messageBody = "Here is a BTC Address I scanned using the Crypto Validate App : $btcAddress"
+                    val btcAddressShareIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT,messageBody)
+                        type = "text/plain"
+                    }
+                    startActivity(btcAddressShareIntent)
+                }
+                else{
+                    Snackbar.make(it,"Please scan a valid BTC address to be able to share",Snackbar.LENGTH_SHORT).show()
+                }
+            }
+            if (ethAddress != "None"){
+                if (Validators.validateETHAddress(ethAddress.trim())){
+                    val messageBody = "Here is a ETH Address I scanned using the Crypto Validate App : $ethAddress"
+                    val ethAddressShareIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT,messageBody)
+                        type = "text/plain"
+                    }
+                    startActivity(ethAddressShareIntent)
+                }
+                else{
+                    Snackbar.make(it,"Please scan a valid ETH address to be able to share",Snackbar.LENGTH_SHORT).show()
                 }
             }
         }
