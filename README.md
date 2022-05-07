@@ -9,3 +9,6 @@ Android App scans and validates BTC/ETH addresses. If the scanned addresses are 
 
 ### Android App Demo
 [Demo](https://youtu.be/V6crtPqApZA)
+
+### APK
+[apk](https://github.com/surajeet310/Crypto-Validate-App/releases/tag/v1.0.0-beta0.1)
